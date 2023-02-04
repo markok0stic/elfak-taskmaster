@@ -1,11 +1,19 @@
+using Shared.Models;
+using Shared.MongoDb;
+using Shared.MongoDb.DbService;
+using TaskMaster.Services;
+
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 builder.Services.AddControllersWithViews();
 builder.Services.AddSession();
 builder.Services.AddHttpContextAccessor();
 
-/*builder.Services
-    .AddSingleton<>();*/
+builder.Services
+    .AddMongoDb(builder.Configuration)
+    .AddMongoDbDataContext<Class>();
+builder.Services
+    .AddSingleton<Service>();
 /*builder.Services
     .AddTransient<>();*/
 
