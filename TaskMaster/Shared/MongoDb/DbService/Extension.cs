@@ -1,10 +1,11 @@
 using Microsoft.Extensions.DependencyInjection;
+using Shared.Models;
 
 namespace Shared.MongoDb.DbService;
 
 public static class Extension
 {
-    public static IServiceCollection AddMongoDbDataContext<T>(this IServiceCollection services) where T : class
+    public static IServiceCollection AddMongoDbDataContext<T>(this IServiceCollection services) where T : BaseBsonModel
     {
         return services.AddSingleton<IMongoDbDataContext<T>,MongoDbDataContext<T>>();
     }

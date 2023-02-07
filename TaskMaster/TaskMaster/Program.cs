@@ -11,18 +11,16 @@ builder.Services.AddHttpContextAccessor();
 
 builder.Services
     .AddMongoDb(builder.Configuration)
-    .AddMongoDbDataContext<Class>();
+    .AddMongoDbDataContext<Project>();
+
 builder.Services
-    .AddSingleton<Service>();
-/*builder.Services
-    .AddTransient<>();*/
+    .AddSingleton<IProjectsService,ProjectsService>();
 
 var app = builder.Build();
-app.UseHttpsRedirection()
+app
+    .UseHttpsRedirection()
     .UseStaticFiles()
     .UseRouting()
-    .UseAuthentication()
-    .UseAuthorization()
     .UseSession();
 app.MapControllerRoute(
     name: "default",
