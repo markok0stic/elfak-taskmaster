@@ -11,10 +11,12 @@ builder.Services.AddHttpContextAccessor();
 
 builder.Services
     .AddMongoDb(builder.Configuration)
-    .AddMongoDbDataContext<Project>();
+    .AddMongoDbDataContext<Project>()
+    .AddMongoDbDataContext<Sprint>();
 
 builder.Services
-    .AddSingleton<IProjectsService,ProjectsService>();
+    .AddSingleton<IProjectsService,ProjectsService>()
+    .AddSingleton<ISprintsService,SprintsService>();
 
 var app = builder.Build();
 app

@@ -1,7 +1,6 @@
 using System.Text.Json.Serialization;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
-using ThirdParty.Json.LitJson;
 
 namespace Shared.Models;
 
@@ -16,6 +15,6 @@ public class BaseBsonModel
 
     private string GetStringRepresentationOfObjectId()
     {
-        return Id.ToString();
+        return "";
     }
 }

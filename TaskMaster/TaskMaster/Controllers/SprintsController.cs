@@ -4,26 +4,26 @@ using TaskMaster.Services;
 
 namespace TaskMaster.Controllers;
 
-public class ProjectsController : Controller
+public class SprintsController: Controller
 {
-    private readonly IProjectsService _projectsService;
-    private readonly ILogger<ProjectsController> _logger;
+    private readonly ISprintsService _sprintsService;
+    private readonly ILogger<SprintsController> _logger;
 
-    public ProjectsController(IProjectsService projectsService, ILogger<ProjectsController> logger)
+    public SprintsController(ISprintsService sprintsService, ILogger<SprintsController> logger)
     {
-        _projectsService = projectsService;
         _logger = logger;
+        _sprintsService = sprintsService;
     }
 
     [HttpGet]
-    public async Task<IActionResult> GetAllProjects()
+    public async Task<IActionResult> GetAllSprints()
     {
         IActionResult response;
         try
         {
-            var projects = (await _projectsService.GetAllProjects() ?? Array.Empty<Project>()).ToList();
-            response = Ok(projects);
-            if (projects == null)
+            var sprints = await _sprintsService.GetAllSprints();
+            response = Ok(sprints);
+            if (sprints == null)
             {
                 response = NoContent();
             }
@@ -38,14 +38,14 @@ public class ProjectsController : Controller
     }
 
     [HttpGet]
-    public async Task<IActionResult> GetProject(string id)
+    public async Task<IActionResult> GetSprint(string id)
     {
         IActionResult response;
         try
         {
-            var project = await _projectsService.FetchProjectWithReferences(id);
-            response = Ok(project);
-            if (project == null)
+            var sprint = await _sprintsService.FetchSprintWithReferences(id);
+            response = Ok(sprint);
+            if (sprint == null)
             {
                 response = NoContent();
             }
@@ -60,12 +60,17 @@ public class ProjectsController : Controller
     }
 
     [HttpPost]
-    public async Task<IActionResult> CreateProject([FromBody]Project project)
+    public async Task<IActionResult> CreateSprint(string projectId, [FromBody]Sprint sprint)
     {
         IActionResult response;
         try
         {
-            response = Ok(await _projectsService.CreateProject(project));
+            var result = await _sprintsService.CreateSprint(projectId, sprint);
+            response = Ok(result);
+            if (result == null)
+            {
+                response = BadRequest();
+            }
         }
         catch (Exception e)
         {
@@ -77,14 +82,14 @@ public class ProjectsController : Controller
     }
 
     [HttpPut]
-    public async Task<IActionResult> UpdateProject(string id, [FromBody]Project project)
+    public async Task<IActionResult> UpdateSprint(string id, [FromBody]Sprint sprint)
     {
         IActionResult response;
         try
         {
-            var updatedProject = await _projectsService.UpdateProject(id, project);
-            response = Ok(updatedProject);
-            if (!updatedProject)
+            var updatedSprint = await _sprintsService.UpdateSprint(id, sprint);
+            response = Ok(updatedSprint);
+            if (!updatedSprint)
             {
                 response = NoContent();
             }
@@ -99,12 +104,12 @@ public class ProjectsController : Controller
     }
 
     [HttpDelete]
-    public async Task<IActionResult> DeleteProject(string id)
+    public async Task<IActionResult> DeleteSprint(string id)
     {
         IActionResult response;
         try
         {
-            var deleted = await _projectsService.DeleteProject(id);
+            var deleted = await _sprintsService.DeleteSprint(id);
             response = Ok(deleted);
             if (!deleted)
             {
