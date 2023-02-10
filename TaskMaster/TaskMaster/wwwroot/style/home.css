@@ -1,0 +1,69 @@
+﻿body {
+}
+button{
+    background-color:cornflowerblue;
+    font-size: 15pt;
+    border-radius:15pt;
+    padding:5pt;
+    width:100pt;
+    margin:5pt;
+    cursor:pointer;
+}
+input {
+    font-size: 15pt;
+    border-radius: 15pt;
+    padding: 5pt;
+    width: 200pt;
+    margin: 5pt;
+}
+select {
+    font-size: 15pt;
+    border-radius: 15pt;
+    padding: 5pt;
+    width: 200pt;
+    margin: 5pt;
+}
+h1{
+    font-size:40pt;
+}
+.centerPosition {
+    align-items: center;
+    justify-content:space-between;
+}
+.flexRow{
+    display:flex;
+    flex-direction:row;
+}
+.flexColumn{
+    display:flex;
+    flex-direction:column;
+}
+.hide{
+    display:none;
+}
+.show{
+    display:flex;
+}
+#createTask {
+    align-items: center;
+}
+#description{
+    width:80%;
+}
+#comments{
+    border:black 1px solid;
+    width:80%;
+    border-radius:10pt;
+    max-height:200pt;
+    overflow-y:scroll;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+}
+#comment{
+    font-size:15pt;
+    padding:10pt;
+    background-color:lightgray;
+    width:80%;
+    border-radius:10pt;
+}

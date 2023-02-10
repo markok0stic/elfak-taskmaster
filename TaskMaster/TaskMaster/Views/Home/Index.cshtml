@@ -5,4 +5,79 @@
     Layout = "_Layout";
 }
 
-<h2>HELLO</h2>
+<div id="main" class="centerPosition flexColumn">
+    <h1>Task Master</h1>
+    <div id="project" class="centerPosition flexColumn">
+        <h2>Project</h2>
+        <div id="createProject" class="hide">
+            <input placeholder="Name*" id="projectName"/>
+            <button>Create</button>
+        </div>
+        <div id="selectProject" class="hide">
+            <select id="taskSelect"></select>
+            <div>
+                <button id="selectProject">Select</button>
+                <button id="deleteProject">Delete</button>
+            </div>
+        </div>
+        <div>
+            <button id="findBtn">Find</button>
+            <button id="addBtn">Add</button>
+        </div>
+    </div>
+    <div id="sprint" class="centerPosition flexColumn hide">
+        <h2>Sprint</h2>
+        <div id="createSprint" class="hide">
+            <input placeholder="Name*" id="sprintName" />
+            <button>Create</button>
+        </div>
+        <div id="selectSprint" class="hide">
+            <select id="taskSelect"></select>
+            <div>
+                <button id="selectSprint">Select</button>
+                <button id="deleteSprint">Delete</button>
+            </div>
+        </div>
+        <div>
+            <button id="findBtn">Find</button>
+            <button id="addBtn">Add</button>
+        </div>
+    </div>
+    <div id="task" class="centerPosition flexColumn hide">
+        <h2>Task</h2>
+        <div id="createTask" class="flexColumn hide">
+            <input placeholder="Name*" id="taskName" />
+            <input placeholder="Description"/>
+            <button>Create</button>
+        </div>
+        <div id="selectTask" class="hide">
+            <select id="taskSelect"></select>
+            <div>
+                <button id="selectTask">Select</button>
+                <button id="deleteTask">Delete</button>
+            </div>
+        </div>
+        <div>
+            <button id="findBtn">Find</button>
+            <button id="addBtn">Add</button>
+        </div>
+        <div id="manageTask" class="centerPosition flexColumn hide">
+            <h3 id="description">asjhasdjhgasdjgas asdgsadjhgasd asjgsgs dgskgsf asfkughskjhkjash asjksaghkjshfcjk asjkgfkjs</h3>
+            <div id="comments">
+                <p id="comment">
+                    comentsd
+                </p>
+                <p id="comment">
+                    comentsd
+                </p>
+                <p id="comment">
+                    comentsd
+                </p>
+            </div>
+            <input placeholder="Add Comment"/>
+            <button>Add</button>
+        </div>
+    </div>
+</div>
+
+<script src="script/home.js"></script>
