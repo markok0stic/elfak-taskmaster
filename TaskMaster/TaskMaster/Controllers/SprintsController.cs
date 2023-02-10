@@ -58,6 +58,25 @@ public class SprintsController: Controller
 
         return response;
     }
+    
+    [HttpGet]
+    public async Task<IActionResult> GetProjectSprints(string projectId) 
+    {
+        IActionResult response;
+        try
+        {
+            var sprints = await _sprintsService.GetManySprints(projectId);
+            response = Ok(sprints);
+            if (sprints == null)
+                response = NoContent();
+        }
+        catch(Exception ex)
+        {
+            _logger.LogError("", ex);
+            response = UnprocessableEntity(ex);
+        }
+        return response;
+    }
 
     [HttpPost]
     public async Task<IActionResult> CreateSprint(string projectId, [FromBody]Sprint sprint)
