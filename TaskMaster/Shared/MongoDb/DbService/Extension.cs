@@ -1,5 +1,6 @@
 using Microsoft.Extensions.DependencyInjection;
 using Shared.Models;
+using Shared.Models.Bson;
 
 namespace Shared.MongoDb.DbService;
 

@@ -43,7 +43,7 @@ public class SprintsController: Controller
         IActionResult response;
         try
         {
-            var sprint = await _sprintsService.FetchSprintWithReferences(id);
+            var sprint = await _sprintsService.GetSprintWithReferences(id);
             response = Ok(sprint);
             if (sprint == null)
             {
@@ -65,9 +65,28 @@ public class SprintsController: Controller
         IActionResult response;
         try
         {
-            var sprints = await _sprintsService.GetManySprints(projectId);
+            var sprints = await _sprintsService.GetSprintsByProjectId(projectId);
             response = Ok(sprints);
             if (sprints == null)
+                response = NoContent();
+        }
+        catch(Exception ex)
+        {
+            _logger.LogError("", ex);
+            response = UnprocessableEntity(ex);
+        }
+        return response;
+    }
+    
+    [HttpGet]
+    public async Task<IActionResult> GetSprintTasks(string sprintId)
+    {
+        IActionResult response;
+        try
+        {
+            var tasks = await _sprintsService.GetTasksBySprintId(sprintId);
+            response = Ok(tasks);
+            if (tasks == null)
                 response = NoContent();
         }
         catch(Exception ex)

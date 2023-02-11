@@ -1,6 +1,8 @@
+using System.Collections;
+using System.Text.Json.Serialization;
 using MongoDB.Bson.Serialization.Attributes;
 using MongoDB.Driver;
-using Shared.Attributes;
+using Shared.Models.Bson;
 
 namespace Shared.Models;
 
@@ -10,17 +12,16 @@ public class Sprint: BaseBsonModel
     public string Name { get; set; } = "";
 
     [BsonElement("ProjectId")] 
-    [BsonCollection(typeof(Project))]
-    public MongoDBRef ProjectId { get; set; } = new("","");
+    public DocumentReference ProjectId { get; set; } = new();
 
-    [BsonElement("TaskIds")] 
-    public List<MongoDBRef> TaskIds { get; set; } = new();
+    [BsonElement("TaskIds")]
+    public List<DocumentReference> TaskIds { get; set; } = new();
     
     [BsonIgnore] 
-    public Project Project { get; set; } = new();
+    public Project? Project { get; set; }
 
-    [BsonIgnore] 
-    public List<Task> Tasks { get; set; } = new();
+    [BsonIgnore]
+    public IEnumerable<Task>? Tasks { get; set; }
 }
 
 

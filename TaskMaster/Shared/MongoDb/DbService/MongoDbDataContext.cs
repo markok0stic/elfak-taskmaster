@@ -1,11 +1,8 @@
-using System.Reflection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using MongoDB.Bson;
 using MongoDB.Driver;
-using Shared.Attributes;
-using Shared.Models;
-using Task = System.Threading.Tasks.Task;
+using Shared.Models.Bson;
 
 namespace Shared.MongoDb.DbService;
 
@@ -14,10 +11,7 @@ public interface IMongoDbDataContext<T> where T: BaseBsonModel
     Task<IEnumerable<T>?> GetAllAsync();
     Task<IEnumerable<T>?> GetManyAsync(FilterDefinition<T> filter);
     Task<T?> GetByIdAsync(ObjectId id);
-
-    Task<T?> FetchWithReferences(ObjectId id,IEnumerable<string>? references = null, int page = 0, int offset = 25);
-    Task<T?> FetchReference<TQ>(T entity);
-
+    
     Task<bool> AddManyAsync(IEnumerable<T> entities);
     Task<T> AddAsync(T entity);
     
@@ -30,9 +24,9 @@ public interface IMongoDbDataContext<T> where T: BaseBsonModel
 
 public class MongoDbDataContext<T>: IMongoDbDataContext<T> where T: BaseBsonModel
 {
+    private readonly IMongoDatabase _database;
     private readonly IMongoCollection<T> _collection;
     private readonly ILogger<MongoDbDataContext<T>> _logger;
-    private readonly IMongoDatabase _database;
     public MongoDbDataContext(IOptions<MongoDbOptions> options, ILogger<MongoDbDataContext<T>> logger)
     {
         var client = new MongoClient(options.Value.ConnectionString);
@@ -85,61 +79,7 @@ public class MongoDbDataContext<T>: IMongoDbDataContext<T> where T: BaseBsonMode
 
         return result;
     }
-
-    public async Task<T?> FetchWithReferences(ObjectId id, IEnumerable<string>? references = null, int page = 0, int offset = 25)
-    {
-        T? result = null;
-        try
-        {
-            var item = _collection.AsQueryable().FirstOrDefault(x => x.Id == id);
-            if (item != null)
-            {
-                var propertyInfos = typeof(T).GetProperties(BindingFlags.Public | BindingFlags.DeclaredOnly | BindingFlags.Instance);
-                foreach (var propertyInfo in propertyInfos)
-                {
-                    if (propertyInfo.PropertyType != (typeof(MongoDBRef)) &&
-                        propertyInfo.PropertyType != (typeof(List<MongoDBRef>)))
-                    {
-                        continue;
-                    }
-                    
-                    if (!propertyInfo.CanWrite || !propertyInfo.CanRead) { continue; }
-
-                    var listMongoRef = propertyInfo.GetValue(item);
-                    if (listMongoRef == null) { continue; }
-                    
-                    var refCollectionName = propertyInfo.GetCustomAttributes(typeof(BsonCollection)).FirstOrDefault();
-                    if (refCollectionName == null) { continue; }
-                    var customAttribute = refCollectionName as BsonCollection;
-                    var refCollection = _database.GetCollection<dynamic>(customAttribute?.Name);
-
-                    if (listMongoRef.GetType() == typeof(List<MongoDBRef>))
-                    {
-                        /*foreach (var dbRef in listMongoRef as List<MongoDBRef>)
-                        {
-                            _database.GetCollection<>(dbRef.CollectionName);
-                        }*/
-                        /*var value = (await refCollection.FindAsync(x => ((listMongoRef as List<MongoDBRef>)!).Contains(x.Id))).ToList();
-                        propertyInfo.SetValue(item,value);*/
-                    }
-                    else
-                    {
-                        /*var value = (await refCollection.FindAsync(x=>x.Id == listMongoRef as MongoDBRef)).ToList();
-                        propertyInfo.SetValue(item,value);*/
-                    }
-                }
-            }
-
-            result = item;
-        }
-        catch (Exception e)
-        {
-            _logger.LogError(e,"");
-        }
-        
-        return result;
-    }
-
+    
     public Task<T?> FetchReference<TQ>(T entity)
     {
         throw new NotImplementedException();
@@ -166,7 +106,7 @@ public class MongoDbDataContext<T>: IMongoDbDataContext<T> where T: BaseBsonMode
         try
         {
             await _collection.InsertOneAsync(entity);
-        }
+        } 
         catch (Exception e)
         {
             _logger.LogError(e,"");

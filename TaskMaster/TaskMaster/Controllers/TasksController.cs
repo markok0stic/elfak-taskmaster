@@ -16,31 +16,12 @@ namespace TaskMaster.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetSprintTasks(string sprintId)
-        {
-            IActionResult response;
-            try
-            {
-                var tasks = await _taskService.GetManyTasks(sprintId);
-                response = Ok(tasks);
-                if (tasks == null)
-                    response = NoContent();
-            }
-            catch(Exception ex)
-            {
-                _logger.LogError("", ex);
-                response = UnprocessableEntity(ex);
-            }
-            return response;
-        }
-
-        [HttpGet]
         public async Task<IActionResult> GetTask(string id)
         {
             IActionResult response;
             try
             {
-                var task = await _taskService.GetTask(id);
+                var task = await _taskService.GetTaskWithReferences(id);
                 response = Ok(task);
                 if (task == null)
                     response = NoContent();
@@ -54,12 +35,17 @@ namespace TaskMaster.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateTask([FromBody] Task task)
+        public async Task<IActionResult> CreateTask(string sprintId, [FromBody]Task task)
         {
             IActionResult response;
             try
             {
-                response = Ok(await _taskService.CreateTask(task));
+                var result = await _taskService.CreateTask(sprintId, task);
+                response = Ok(result);
+                if (result == null)
+                {
+                    response = BadRequest();
+                }
             }
             catch(Exception e)
             {
@@ -70,7 +56,7 @@ namespace TaskMaster.Controllers
         }
 
         [HttpPut]
-        public async Task<IActionResult> UpdateTask(string id, [FromBody] Task task)
+        public async Task<IActionResult> UpdateTask(string id, [FromBody]Task task)
         {
             IActionResult response;
             try

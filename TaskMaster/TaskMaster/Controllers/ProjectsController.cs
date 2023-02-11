@@ -21,7 +21,7 @@ public class ProjectsController : Controller
         IActionResult response;
         try
         {
-            var projects = (await _projectsService.GetAllProjects() ?? Array.Empty<Project>()).ToList();
+            var projects = await _projectsService.GetAllProjects();
             response = Ok(projects);
             if (projects == null)
             {
@@ -43,7 +43,7 @@ public class ProjectsController : Controller
         IActionResult response;
         try
         {
-            var project = await _projectsService.FetchProjectWithReferences(id);
+            var project = await _projectsService.GetProjectWithReferences(id);
             response = Ok(project);
             if (project == null)
             {
